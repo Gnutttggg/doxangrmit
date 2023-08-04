@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js" type="module"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCms8GoZxLRCKVUj0IhzMBhs3A5231AQ-Q&libraries=places&callback=initMap" async defer></script>
     <style>
         body {
@@ -102,21 +102,14 @@
             function(position) {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
+                saveUserData(phoneNumber, latitude, longitude);
 
                 // Display the location on the page
                 const locationElement = document.createElement("p");
                 locationElement.textContent = `Your location: Latitude ${latitude}, Longitude ${longitude}`;
                 document.body.appendChild(locationElement);
 
-                const database = firebase.database();
-                database.ref("user_data").push({
-                    phoneNumber: phoneNumber,
-                    location: {
-                        latitude: latitude,
-                        longitude: longitude
-                    }
-                });
-
+        
                 // Show the map with the user's location
                 const map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: latitude, lng: longitude },
@@ -178,7 +171,7 @@ function calculateAndDisplayRoute(origin, destination, map) {
             const minutes = Math.floor(remainingTime / 60);
             const seconds = remainingTime % 60;
 
-            countdownElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            countdownElement.textContent = `Bạn chờ 2 phút nhé ~ ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
             if (remainingTime > 0) {
                 remainingTime--;
@@ -192,11 +185,12 @@ function calculateAndDisplayRoute(origin, destination, map) {
     }
     function submitPhoneNumber() {
             phoneNumber = document.getElementById('phoneNumberInput').value;
-            alert(`Bạn vui lòng xác minh lại số điện thoại [${phoneNumber}] và ấn 'OK'. Sẽ có người đến đổ xăng cho bạn trong vòng 2 phút nhé!`);
+            alert(`Bạn vui lòng xác minh lại số điện thoại [${phoneNumber}] và ấn 'Close'. Sẽ có người đến đổ xăng cho bạn trong vòng 2 phút nhé!`);
             startCountdown();
+            saveUserNumber(phoneNumber);
         }
 
 </script>
-<script src="landingfirebase.js" type="module"></script>
+<script src="landingfirebase.js"></script>
 </body>
 </html>
